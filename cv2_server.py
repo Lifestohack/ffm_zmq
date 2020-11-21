@@ -5,7 +5,7 @@ from payload import Payload
 from time import time
 import sys
 
-host = "192.168.0.213"
+host = "192.168.0.188"
 port = "55555"
 
 cap = cv2.VideoCapture(0)
@@ -18,6 +18,8 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, 340)
 cap.set(cv2.CAP_PROP_FPS, 32)
 retval	=	cv2.VideoWriter_fourcc(	"H", "2", "6", "4"	)
 #retval	=	cv2.VideoWriter_fourcc(	"M", "J", "P", "G"	)
+#retval	=	cv2.VideoWriter_fourcc(	"2", "V", "U","Y")
+
 cap.set(cv2.CAP_PROP_FOURCC, retval)
 
 ctx = zmq.Context()
@@ -44,6 +46,7 @@ try:
         if not ret:
             print("Can't receive frame (stream end?). Exiting ...")
             break
+        #image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         payload.setPayloadParam(time(), image, index)
         msg_streamer.send(payload.get())
         if time() - start_time > 1:
