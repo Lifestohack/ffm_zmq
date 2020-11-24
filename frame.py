@@ -8,6 +8,7 @@ class Ffmpegdata:
     def __init__(self, source):
         self.source = source
         self.width, self.height = self.get_video_size(source) # or add custom values
+        self.process = self.start_ffmpeg_process()
 
 
     def get_video_size(self, source):
@@ -46,9 +47,6 @@ class Ffmpegdata:
                 .reshape([height, width, 3])
             )
         return frame
-
-    def start(self):
-        self.process = self.start_ffmpeg_process()
 
     def read(self):
         return self.read_frame(self.process, self.width, self.height)

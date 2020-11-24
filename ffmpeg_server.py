@@ -17,8 +17,7 @@ msg_streamer = Msg_Streamer(ctx, icp_req_add)
 
 source = "/dev/video0"
 ffmpeg = Ffmpegdata(source)
-ffmpeg.start()
-sleep(2)
+
 width = 640
 height = 360
 payload = Payload("world", width, height)
