@@ -1,32 +1,54 @@
-import os
-import socket
+import ffmpeg
+import cv2
+import numpy as np
 import subprocess
-import time
-import sys
-import numpy
+import logging as logger
 
 class Ffmpegdata:
-    command = 'ffmpeg ' \
-              '-y ' \
-              '-s 640x480 ' \
-              '-pix_fmt rgb24 ' \
-              '-i /dev/video0 ' \
-              '-f rawvideo ' \
-              '-an ' \
-              '-'
+    def __init__(self, source):
+        self.source = source
+        self.width, self.height = self.get_video_size(source) # or add custom values
 
-    def __init__(self):
-        self.p = subprocess.Popen(self.command.split(), 
-        stdin=open(os.devnull), 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.PIPE)
-        
 
-    def get(self):
-        data = self.p.stdout.read(640*480*3)
-        if len(data) == 0:
-            err = self.p.stderr.readlines()
-            if len(err) > 0:
-                print('Error')
-                print(''.join([l.decode() for l in err]))
-        return data
+    def get_video_size(self, source):
+        logger.info('Getting video size for {!r}'.format(source))
+        probe = ffmpeg.probe(source)
+        video_info = next(s for s in probe['streams'] if s['codec_type'] == 'video')
+        width = int(video_info['width'])
+        height = int(video_info['height'])
+        return width, height
+
+    def start_ffmpeg_process(self):
+        logger.info('Starting ffmpeg process')
+        args = (
+            ffmpeg
+            .input(self.source)
+            .output('pipe:', 
+                    format='rawvideo', 
+                    s=f'{self.width}x{self.height}', 
+                    pix_fmt='rgb24')
+            .compile()
+        )
+        return subprocess.Popen(args, stdout=subprocess.PIPE)
+
+    def read_frame(self, process1, width, height):
+        logger.debug('Reading frame')
+        # Note: RGB24 == 3 bytes per pixel.
+        frame_size = width * height * 3
+        in_bytes = process1.stdout.read(frame_size)
+        if len(in_bytes) == 0:
+            frame = None
+        else:
+            assert len(in_bytes) == frame_size
+            frame = (
+                np
+                .frombuffer(in_bytes, np.uint8)
+                .reshape([height, width, 3])
+            )
+        return frame
+
+    def start(self):
+        self.process = self.start_ffmpeg_process()
+
+    def read(self):
+        return self.read_frame(self.process, self.width, self.height)
