@@ -1,6 +1,6 @@
 class Payload:
 
-    def __init__(self, topic, width, height, intrinsics=None):
+    def __init__(self, topic, width, height, format="bgr", intrinsics=None):
         if intrinsics is None:
              intrinsics = [
                         [1000, 0.0, 192 / 2.0],
@@ -11,7 +11,7 @@ class Payload:
             raise Exception("topic has to be either: world, eye0 or eye1")
 
         self.payload = {}
-        self.payload["format"] = "rgb"
+        self.payload["format"] = format
         self.payload["projection_matrix"] = intrinsics
         self.payload["topic"] = "hmd_streaming." + topic
         self.payload["width"] = width
