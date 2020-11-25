@@ -1,5 +1,7 @@
 # Ffmpeg Server and client setup with Real time ZMQ server Implementation
 
+This program helps you to stream real time video from one computer to another computer using ffmpeg.
+
 ffmpeg server:
 1. Binds a zmq server. 
 1. Reads the bytes for the using ffmpeg as yuv other pix_fmt as stated in ffmpeg.
@@ -14,7 +16,7 @@ Usages:
 
 Note: Make sure both client and server are on the same network
 
-Step 1: change the server ip in ffm_server.py.
-Step 2: Run it on the server.
-Step 3: Change the ip address on ffm_client.py (same as the ip address of server)
-step 4: Run the ffm_client.py on client.
+1. Change the server ip in ffm_server.py.
+2. Run it on the server.
+3. Change the ip address on ffm_client.py (same as the ip address of server)
+4. Run the ffm_client.py on client.
