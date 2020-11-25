@@ -5,7 +5,7 @@ This program helps you to stream real time video from one computer to another co
 Install Dependencies:
 ```sh
 sudo apt install -y python3-opencv
-sudo apt-get install ffmpeg
+sudo apt install ffmpeg
 
 python3 -m install ffmpeg-python
 python3 -m pip install pyzmq
