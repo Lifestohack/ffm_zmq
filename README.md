@@ -1,4 +1,4 @@
-# ffmpeg
+# Ffmpeg Server and client setup with Real time ZMQ server Implementation
 
 ffmpeg server:
 1. Binds a zmq server. 
