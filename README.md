@@ -12,7 +12,7 @@ ffmpeg client:
 
 Usages:
 
-# Make sure both client and server are on the same network
+Note: Make sure both client and server are on the same network
 
 Step 1: change the server ip in ffm_server.py.
 Step 2: Run it on the server.
