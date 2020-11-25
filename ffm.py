@@ -3,6 +3,7 @@ import subprocess
 import numpy as np
 import sys
 from scipy import ndimage
+import helper
 
 class VideoCapture:
     '''
@@ -14,7 +15,6 @@ class VideoCapture:
         self.width, self.height = self.get_video_size() # or add custom values
         # Note: RGB24 == 3 bytes per pixel.
         self.setframeSize()
-        self.size = 0
     
     def setResolution(self, width, height):
         self.width = width
@@ -25,10 +25,7 @@ class VideoCapture:
         if self.pix_fmt == "bgr24":
             self.frame_size = self.width * self.height * 3
         elif self.pix_fmt == "yuv420p":
-            Y = self.width * self.height
-            U = Y / 4
-            V = Y / 4
-            self.frame_size = int(Y + U + V)
+            self.frame_size = int(self.width * self.height * 1.5) 
         else:
             raise NotImplementedError()
 
@@ -68,9 +65,8 @@ class VideoCapture:
         Grabs the next frame from video file or capturing device. 
         '''
         in_bytes = self.process.stdout.read(self.frame_size)
-        self.size = sys.getsizeof(in_bytes)
-        if self.size == 17:
-            raise Exception("Read 0 byte. No image was grabed.")
+        # if sys.getsizeof(in_bytes) == 17:
+        #     raise Exception("Read 0 byte. No image was grabed.")
         return in_bytes
 
     def retrieve(self, in_bytes):
@@ -88,7 +84,7 @@ class VideoCapture:
                 .reshape([self.height, self.width, 3])
             )
         elif self.pix_fmt == "yuv420p":
-                raise NotImplementedError()
+                frame = helper.YUVtoBGR(in_bytes, self.width, self.height)
         else:
             raise NotImplementedError()
 

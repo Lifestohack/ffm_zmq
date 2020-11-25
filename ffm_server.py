@@ -13,21 +13,23 @@ host = "10.3.141.1"
 port = "12349"
 ctx = zmq.Context()
 icp_req_add = "tcp://{}:{}".format(host, port)
-msg_streamer = Msg_Streamer(ctx, icp_req_add, hwm=1)
+msg_streamer = Msg_Streamer(ctx, icp_req_add)
 
 source = "/dev/video0"
-cap = ffm.VideoCapture(source)
+cap = ffm.VideoCapture(source, pix_fmt="yuv420p")
 
 width = 320
 height = 240
 frame = 1
 fps = 0
 index = 0
-start_time = time()
 cap.setResolution(width, height)
 cap.start()
 payload = Payload("world", width, height, format="yuv")
-image_read_time = time()
+image = cap.read()
+width = image.shape[1]
+height = image.shape[0]
+start_time = image_read_time = time()
 try:
     while True:
         image = cap.grab()
@@ -38,7 +40,7 @@ try:
             fps = frame
             frame = 0
             start_time = time()
-        outstr = "Frames: {}, FPS: {}, Frame Read latency: {}".format(index, fps, latency)
+        outstr = "Frames: {}, FPS: {}, Frame Read latency: {:.6f} ".format(index, fps, latency)
         sys.stdout.write('\r'+ outstr)
         frame = frame + 1
         index = index + 1
