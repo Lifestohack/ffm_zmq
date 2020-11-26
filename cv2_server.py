@@ -16,9 +16,9 @@ if not cap.isOpened():
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 420)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 340)
 cap.set(cv2.CAP_PROP_FPS, 32)
-retval	=	cv2.VideoWriter_fourcc(	"H", "2", "6", "4"	)
-#retval	=	cv2.VideoWriter_fourcc(	"M", "J", "P", "G"	)
-#retval	=	cv2.VideoWriter_fourcc(	"2", "V", "U","Y")
+retval = cv2.VideoWriter_fourcc("H", "2", "6", "4")
+# retval	=	cv2.VideoWriter_fourcc(	"M", "J", "P", "G"	)
+# retval	=	cv2.VideoWriter_fourcc(	"2", "V", "U","Y")
 
 cap.set(cv2.CAP_PROP_FOURCC, retval)
 
@@ -46,15 +46,15 @@ try:
         if not ret:
             print("Can't receive frame (stream end?). Exiting ...")
             break
-        #image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         payload.setPayloadParam(time(), image, index)
         msg_streamer.send(payload.get())
         if time() - start_time > 1:
             fps = frame
             frame = 0
             start_time = time()
-        outstr = "Frames: {}, FPS: {}".format(index, fps) 
-        sys.stdout.write('\r'+ outstr)
+        outstr = "Frames: {}, FPS: {}".format(index, fps)
+        sys.stdout.write("\r" + outstr)
         frame = frame + 1
         index = index + 1
 except (KeyboardInterrupt, SystemExit):

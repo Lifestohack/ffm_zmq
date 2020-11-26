@@ -17,7 +17,9 @@ port = "12349"
 
 ctx = zmq.Context()
 icp_req_add = "tcp://{}:{}".format(host, port)
-msg_receiver = Msg_Receiver(ctx, icp_req_add, topics=("hmd_streaming.world",), block_until_connected=False)
+msg_receiver = Msg_Receiver(
+    ctx, icp_req_add, topics=("hmd_streaming.world",), block_until_connected=False
+)
 
 try:
     frame = 1
@@ -27,18 +29,20 @@ try:
     l_start_time = time()
     while True:
         topic, payload = msg_receiver.recv()
-        size = sys.getsizeof(payload['__raw_data__'][0])
+        size = sys.getsizeof(payload["__raw_data__"][0])
         latency = time() - l_start_time
-        image = helper.YUVtoBGR(payload['__raw_data__'][0], payload['width'], payload['height'])
-        cv2.imshow('frame', image)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        image = helper.YUVtoBGR(
+            payload["__raw_data__"][0], payload["width"], payload["height"]
+        )
+        cv2.imshow("frame", image)
+        if cv2.waitKey(1) & 0xFF == ord("q"):
             break
         if time() - start_time > 1:
             fps = frame
             frame = 0
             start_time = time()
-        outstr = "Frames: {}, FPS: {}, Latency: {:.6f}".format(index, fps, latency) 
-        sys.stdout.write('\r'+ outstr)
+        outstr = "Frames: {}, FPS: {}, Latency: {:.6f}".format(index, fps, latency)
+        sys.stdout.write("\r" + outstr)
         frame = frame + 1
         index = index + 1
         l_start_time = time()

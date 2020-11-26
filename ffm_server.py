@@ -7,7 +7,8 @@ from payload import Payload
 import numpy as np
 import logging as logger
 import traceback
-#import cv2
+
+# import cv2
 
 host = "10.3.141.1"
 port = "12349"
@@ -40,8 +41,10 @@ try:
             fps = frame
             frame = 0
             start_time = time()
-        outstr = "Frames: {}, FPS: {}, Frame Read latency: {:.6f} ".format(index, fps, latency)
-        sys.stdout.write('\r'+ outstr)
+        outstr = "Frames: {}, FPS: {}, Frame Read latency: {:.6f} ".format(
+            index, fps, latency
+        )
+        sys.stdout.write("\r" + outstr)
         frame = frame + 1
         index = index + 1
         image_read_time = time()
