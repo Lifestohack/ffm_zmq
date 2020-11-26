@@ -16,11 +16,6 @@ if not cap.isOpened():
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 420)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 340)
 cap.set(cv2.CAP_PROP_FPS, 32)
-retval = cv2.VideoWriter_fourcc("H", "2", "6", "4")
-# retval	=	cv2.VideoWriter_fourcc(	"M", "J", "P", "G"	)
-# retval	=	cv2.VideoWriter_fourcc(	"2", "V", "U","Y")
-
-cap.set(cv2.CAP_PROP_FOURCC, retval)
 
 ctx = zmq.Context()
 pupil_remote = zmq.Socket(ctx, zmq.REQ)
